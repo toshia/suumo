@@ -8,7 +8,7 @@ Plugin.create(:suumo) do
           condition: lambda{ |opt| opt.messages.all?(&:repliable?) },
           visible: true,
           role: :timeline) do |opt|
-    opt.messages.map(&:message).each do |message|
+    opt.messages.each do |message|
       opt.widget.create_postbox(to: message,
                                 footer: キチガイ % {sn: message.user.idname, name: message.user[:name]})
     end
@@ -18,7 +18,7 @@ Plugin.create(:suumo) do
           name: ->opt{
             if defined? opt.messages.first and opt.messages.first.repliable?
               u = opt.messages.first.user
-              (_("あ！#{opt.messages.first.message.user[:name]}（@#{opt.messages.first.message.user.idname}）！") % {
+              (_("あ！#{u[:name]}（@#{u[:idname]}）！") % {
                  screen_name: u[:idname],
                  name: u[:name] }).gsub(/_/, '__')
             else
@@ -26,7 +26,7 @@ Plugin.create(:suumo) do
           condition: lambda{ |opt| opt.messages.size == 1 && opt.messages.all?(&:repliable?) },
           visible: true,
           role: :timeline) do |opt|
-    opt.messages.map(&:message).each do |message|
+    opt.messages.each do |message|
       message.post(message: キチガイ % {sn: message.user.idname, name: message.user[:name]})
     end
   end
